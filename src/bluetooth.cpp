@@ -1,36 +1,40 @@
 #include <SoftwareSerial.h>
-#include <Arduino.h>
-#include "bluetooth.h"
+#include "Bluetooth.h"
 
-// Ustawienie pinów do SoftwareSerial (możesz ustawić inne piny)
-SoftwareSerial bluetoothSerial(RX_BT, TX_BT); // RX, TX
-
-String inputString = "";
-bool stringComplete = false;
-
-void setupBluetooth()
+Bluetooth::Bluetooth() : serial(RX_BT, TX_BT)
 {
-    bluetoothSerial.begin(9600);
+    this->data = "";
+    this->dataComplete = false;
 }
 
-void handleBluetooth()
+void Bluetooth::begin()
 {
-    while (bluetoothSerial.available())
+    this->serial.begin(9600);
+}
+
+void Bluetooth::onDataAvailable(void (*callback)(String))
+{
+    while (this->serial.available())
     {
-        char inChar = (char)bluetoothSerial.read();
-        inputString += inChar;
+        char inChar = (char)this->serial.read();
 
         if (inChar == '\n')
         {
-            stringComplete = true;
+            this->dataComplete = true;
+        }
+        else
+        {
+            this->data += inChar;
         }
     }
 
-    if (stringComplete)
+    if (dataComplete)
     {
-        Serial.println(inputString);
+        Serial.println(this->data);
 
-        inputString = "";
-        stringComplete = false;
+        this->data = "";
+        this->dataComplete = false;
+
+        callback(this->data);
     }
 }

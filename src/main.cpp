@@ -1,13 +1,20 @@
 #include <Arduino.h>
-#include "bluetooth.h"
+#include "Setup.h"
+#include "Car.h"
+
+#include <SoftwareSerial.h>
+
+Bluetooth bluetooth;
+Car car(bluetooth);
 
 void setup()
 {
-  Serial.begin(9600);
-  setupBluetooth();
+  bluetooth.begin();
+  setupSerialMonitor();
+  setupEnginesController();
 }
 
 void loop()
 {
-  handleBluetooth();
+  car.run();
 }
