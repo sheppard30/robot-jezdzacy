@@ -1,33 +1,58 @@
 #ifndef CAR_H
 #define CAR_H
 
-#define CMD_MOVE_FORWARD "B0"  // Komenda dla jazdy do przodu
-#define CMD_MOVE_BACKWARD "B1" // Komenda dla jazdy do tyłu
-#define CMD_TURN_LEFT "B2"     // Komenda dla jazdy w lewo
-#define CMD_TURN_RIGHT "B3"    // Komenda dla jazdy w prawo
-#define CMD_STOP "B4"          // Komenda stop
-
-#define ENGINE_INPUT_1 4 // Pin IN1 dla silnika 1
-#define ENGINE_INPUT_2 5 // Pin IN2 dla silnika 1
-#define ENGINE_INPUT_3 6 // Pin IN3 dla silnika 2
-#define ENGINE_INPUT_4 7 // Pin IN4 dla silnika 2
-
-#define ENGINE_1_PWM 9
-#define ENGINE_2_PWM 10
-
+#include "Arduino.h"
 #include "Bluetooth.h"
+#include "DistanceSensor.h"
+
+#define COMMAND_MOVE_FORWARD "B0"  // Komenda dla jazdy do przodu
+#define COMMAND_MOVE_BACKWARD "B1" // Komenda dla jazdy do tyłu
+#define COMMAND_TURN_LEFT "B2"     // Komenda dla jazdy w lewo
+#define COMMAND_TURN_RIGHT "B3"    // Komenda dla jazdy w prawo
+#define COMMAND_STOP "B4"          // Komenda stop
+
+#define ENGINE_INPUT_1 14 // Pin IN1 dla silnika 1
+#define ENGINE_INPUT_2 15 // Pin IN2 dla silnika 1
+#define ENGINE_INPUT_3 16 // Pin IN3 dla silnika 2
+#define ENGINE_INPUT_4 17 // Pin IN4 dla silnika 2
+
+#define ENGINE_1_PWM 5
+#define ENGINE_2_PWM 6
+
+#define LED_OUTPUT 9
+
+#define MIN_DISTANCE 10.0
+
+enum Direction
+{
+    FORWARD,
+    BACKWARD,
+    LEFT,
+    RIGHT,
+    STOP
+}
 
 class Car
 {
 private:
     Bluetooth &bluetooth;
+    DistanceSensor &sensor;
+    Direction direction;
 
+    void goForward();
+    void goBackward();
+    void turnLeft();
+    void turnRight();
+    void stop();
     void listenForCommands();
+    void turnLEDOn();
+    void handleDistanceSensor();
 
 public:
-    Car(Bluetooth &bluetooth);
+    Car(Bluetooth &bluetooth, DistanceSensor &sensor);
 
-    void run();
+    void begin();
+    void initialize();
 };
 
 #endif
