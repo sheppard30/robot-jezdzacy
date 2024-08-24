@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <SoftwareSerial.h>
+#include "DebugSerial.h"
 
 // Definicja pinów do komunikacji z modułem Bluetooth
 #define RX_BT 0 // Pin RX modułu Bluetooth (do odbioru danych)
@@ -39,7 +40,7 @@ public:
 
         if (dataComplete)
         {
-            Serial.println(this->data);
+            debug.println(this->data);
             callback(this->data);
 
             this->data = "";

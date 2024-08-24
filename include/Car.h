@@ -30,13 +30,13 @@ enum Direction
     LEFT,
     RIGHT,
     STOP
-}
+};
 
 class Car
 {
 private:
-    Bluetooth &bluetooth;
-    DistanceSensor &sensor;
+    Bluetooth bluetooth;
+    DistanceSensor distanceSensor;
     Direction direction;
 
     void goForward();
@@ -49,7 +49,7 @@ private:
     void handleDistanceSensor();
 
 public:
-    Car(Bluetooth &bluetooth, DistanceSensor &sensor);
+    Car();
 
     void begin();
     void initialize();

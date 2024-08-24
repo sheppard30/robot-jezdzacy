@@ -1,16 +1,16 @@
 #include <Arduino.h>
 #include "Car.h"
+#include "DebugSerial.h"
 
-Bluetooth bluetooth;
-DistanceSensor distanceSensor;
-Car car(bluetooth, distanceSensor);
+Car car;
 
 void setup()
 {
-  bluetooth.begin();
   car.begin();
-  distanceSensor.begin();
+  debug.begin(9600);
   Serial.begin(9600);
+
+  debug.println("Wlaczono");
 }
 
 void loop()

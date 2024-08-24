@@ -1,4 +1,5 @@
 #include "DistanceSensor.h"
+#include "DebugSerial.h"
 
 DistanceSensor::DistanceSensor() : distance(-1)
 {

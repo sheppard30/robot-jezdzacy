@@ -1,11 +1,14 @@
 #include "Car.h"
 
-Car::Car(Bluetooth &bt, DistanceSensor &s) : bluetooth(bt), sensor(s), direction(Direction::STOP)
+Car::Car() : direction(Direction::STOP)
 {
 }
 
 void Car::begin()
 {
+    this->bluetooth.begin();
+    this->distanceSensor.begin();
+
     pinMode(ENGINE_INPUT_1, OUTPUT);
     pinMode(ENGINE_INPUT_2, OUTPUT);
     pinMode(ENGINE_INPUT_3, OUTPUT);
@@ -31,35 +34,15 @@ void Car::listenForCommands()
                             
     if (command == COMMAND_MOVE_FORWARD)
     {
-        Serial.println("Jade do przodu");
-        digitalWrite(ENGINE_INPUT_1, LOW);
-        digitalWrite(ENGINE_INPUT_2, HIGH);
-        digitalWrite(ENGINE_INPUT_3, LOW);
-        digitalWrite(ENGINE_INPUT_4, HIGH);
+        this->goForward();
     } else if (command == COMMAND_MOVE_BACKWARD) {
-        Serial.println("Jade do tylu");
-        digitalWrite(ENGINE_INPUT_1, HIGH);
-        digitalWrite(ENGINE_INPUT_2, LOW);
-        digitalWrite(ENGINE_INPUT_3, HIGH);
-        digitalWrite(ENGINE_INPUT_4, LOW);
+        this->goBackward();
     } else if (command == COMMAND_TURN_LEFT) {
-        Serial.println("Jade w lewo");
-        digitalWrite(ENGINE_INPUT_1, LOW);
-        digitalWrite(ENGINE_INPUT_2, HIGH);
-        digitalWrite(ENGINE_INPUT_3, LOW);
-        digitalWrite(ENGINE_INPUT_4, LOW);
+        this->turnLeft();
     } else if (command == COMMAND_TURN_RIGHT) {
-        Serial.println("Jade w prawo");
-        digitalWrite(ENGINE_INPUT_1, LOW);
-        digitalWrite(ENGINE_INPUT_2, LOW);
-        digitalWrite(ENGINE_INPUT_3, LOW);
-        digitalWrite(ENGINE_INPUT_4, HIGH);
+        this->turnRight();
     } else if (command == COMMAND_STOP) {
-        Serial.println("Halt!");
-        digitalWrite(ENGINE_INPUT_1, LOW);
-        digitalWrite(ENGINE_INPUT_2, LOW);
-        digitalWrite(ENGINE_INPUT_3, LOW);
-        digitalWrite(ENGINE_INPUT_4, LOW);
+        this->stop();
     } });
 }
 
@@ -68,11 +51,68 @@ void Car::turnLEDOn()
     digitalWrite(LED_OUTPUT, HIGH);
 }
 
+void Car::goForward()
+{
+    debug.println("Jade do przodu");
+
+    digitalWrite(ENGINE_INPUT_1, LOW);
+    digitalWrite(ENGINE_INPUT_2, HIGH);
+    digitalWrite(ENGINE_INPUT_3, LOW);
+    digitalWrite(ENGINE_INPUT_4, HIGH);
+
+    this->direction = Direction::FORWARD;
+}
+
+void Car::goBackward()
+{
+    debug.println("Jade do tylu");
+
+    digitalWrite(ENGINE_INPUT_1, HIGH);
+    digitalWrite(ENGINE_INPUT_2, LOW);
+    digitalWrite(ENGINE_INPUT_3, HIGH);
+    digitalWrite(ENGINE_INPUT_4, LOW);
+
+    this->direction = Direction::BACKWARD;
+}
+
+void Car::turnLeft()
+{
+    debug.println("Jade w lewo");
+    digitalWrite(ENGINE_INPUT_1, LOW);
+    digitalWrite(ENGINE_INPUT_2, HIGH);
+    digitalWrite(ENGINE_INPUT_3, LOW);
+    digitalWrite(ENGINE_INPUT_4, LOW);
+
+    this->direction = Direction::LEFT;
+}
+
+void Car::turnRight()
+{
+    debug.println("Jade w prawo");
+    digitalWrite(ENGINE_INPUT_1, LOW);
+    digitalWrite(ENGINE_INPUT_2, LOW);
+    digitalWrite(ENGINE_INPUT_3, LOW);
+    digitalWrite(ENGINE_INPUT_4, HIGH);
+
+    this->direction = Direction::RIGHT;
+}
+
+void Car::stop()
+{
+    debug.println("Halt!");
+    digitalWrite(ENGINE_INPUT_1, LOW);
+    digitalWrite(ENGINE_INPUT_2, LOW);
+    digitalWrite(ENGINE_INPUT_3, LOW);
+    digitalWrite(ENGINE_INPUT_4, LOW);
+
+    this->direction = Direction::STOP;
+}
+
 void Car::handleDistanceSensor()
 {
-    this->sensor.initialize();
+    this->distanceSensor.initialize();
 
-    if (this->direction == = FORWARD && this->sensor.getDistance() < MIN_DISTANCE)
+    if (this->direction == FORWARD && this->distanceSensor.getDistance() < MIN_DISTANCE)
     {
         digitalWrite(ENGINE_INPUT_1, LOW);
         digitalWrite(ENGINE_INPUT_2, LOW);
@@ -84,6 +124,6 @@ void Car::handleDistanceSensor()
 void Car::initialize()
 {
     this->turnLEDOn();
-    this->handleSensor();
+    this->handleDistanceSensor();
     this->listenForCommands();
 }
