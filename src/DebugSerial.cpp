@@ -1,3 +1,3 @@
 #include "DebugSerial.h"
 
-SoftwareSerial debug(7, 8);
+// SoftwareSerial debug(7, 8);

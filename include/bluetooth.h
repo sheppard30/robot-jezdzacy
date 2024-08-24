@@ -40,7 +40,7 @@ public:
 
         if (dataComplete)
         {
-            debug.println(this->data);
+            Serial.println(this->data);
             callback(this->data);
 
             this->data = "";

@@ -6,8 +6,8 @@ Car::Car() : direction(Direction::STOP)
 
 void Car::begin()
 {
-    this->bluetooth.begin();
-    this->distanceSensor.begin();
+    bluetooth.begin();
+    distanceSensor.begin();
 
     pinMode(ENGINE_INPUT_1, OUTPUT);
     pinMode(ENGINE_INPUT_2, OUTPUT);
@@ -22,8 +22,8 @@ void Car::begin()
     digitalWrite(ENGINE_INPUT_3, LOW);
     digitalWrite(ENGINE_INPUT_4, LOW);
 
-    digitalWrite(ENGINE_1_PWM, 255);
-    digitalWrite(ENGINE_2_PWM, 255);
+    analogWrite(ENGINE_1_PWM, 120);
+    analogWrite(ENGINE_2_PWM, 120);
 }
 
 void Car::listenForCommands()
@@ -53,7 +53,7 @@ void Car::turnLEDOn()
 
 void Car::goForward()
 {
-    debug.println("Jade do przodu");
+    Serial.println("Jade do przodu");
 
     digitalWrite(ENGINE_INPUT_1, LOW);
     digitalWrite(ENGINE_INPUT_2, HIGH);
@@ -65,7 +65,7 @@ void Car::goForward()
 
 void Car::goBackward()
 {
-    debug.println("Jade do tylu");
+    Serial.println("Jade do tylu");
 
     digitalWrite(ENGINE_INPUT_1, HIGH);
     digitalWrite(ENGINE_INPUT_2, LOW);
@@ -77,7 +77,8 @@ void Car::goBackward()
 
 void Car::turnLeft()
 {
-    debug.println("Jade w lewo");
+    Serial.println("Jade w lewo");
+
     digitalWrite(ENGINE_INPUT_1, LOW);
     digitalWrite(ENGINE_INPUT_2, HIGH);
     digitalWrite(ENGINE_INPUT_3, LOW);
@@ -88,7 +89,8 @@ void Car::turnLeft()
 
 void Car::turnRight()
 {
-    debug.println("Jade w prawo");
+    Serial.println("Jade w prawo");
+
     digitalWrite(ENGINE_INPUT_1, LOW);
     digitalWrite(ENGINE_INPUT_2, LOW);
     digitalWrite(ENGINE_INPUT_3, LOW);
@@ -99,7 +101,8 @@ void Car::turnRight()
 
 void Car::stop()
 {
-    debug.println("Halt!");
+    Serial.println("Halt!");
+
     digitalWrite(ENGINE_INPUT_1, LOW);
     digitalWrite(ENGINE_INPUT_2, LOW);
     digitalWrite(ENGINE_INPUT_3, LOW);
@@ -112,12 +115,9 @@ void Car::handleDistanceSensor()
 {
     this->distanceSensor.initialize();
 
-    if (this->direction == FORWARD && this->distanceSensor.getDistance() < MIN_DISTANCE)
+    if (this->direction == Direction::FORWARD && this->distanceSensor.getDistance() < MIN_DISTANCE)
     {
-        digitalWrite(ENGINE_INPUT_1, LOW);
-        digitalWrite(ENGINE_INPUT_2, LOW);
-        digitalWrite(ENGINE_INPUT_3, LOW);
-        digitalWrite(ENGINE_INPUT_4, LOW);
+        this->stop();
     }
 }
 
