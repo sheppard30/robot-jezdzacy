@@ -3,11 +3,11 @@
 
 #include <Arduino.h>
 #include <SoftwareSerial.h>
-#include "DebugSerial.h"
+#include "Logger.h"
 
 // Definicja pinów do komunikacji z modułem Bluetooth
-#define RX_BT 0 // Pin RX modułu Bluetooth (do odbioru danych)
-#define TX_BT 1 // Pin TX modułu Bluetooth (do wysyłania danych)
+#define RX_BT 2 // Pin RX modułu Bluetooth (do odbioru danych)
+#define TX_BT 3 // Pin TX modułu Bluetooth (do wysyłania danych)
 
 class Bluetooth
 {
@@ -40,7 +40,7 @@ public:
 
         if (dataComplete)
         {
-            Serial.println(this->data);
+            Logger::debug("BT: " + this->data);
             callback(this->data);
 
             this->data = "";

@@ -2,10 +2,11 @@
 #define DISTANCESENSOR_H
 
 #include <Arduino.h>
+#include "Logger.h"
 
 #define TRIGGER_INTERVAL 500
-#define ECHO_INPUT 18
-#define TRIGGER_OUTPUT 19
+#define ECHO_INPUT 18     // PC4
+#define TRIGGER_OUTPUT 19 // PC5
 
 class DistanceSensor
 {

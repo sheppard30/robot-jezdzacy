@@ -53,7 +53,7 @@ void Car::turnLEDOn()
 
 void Car::goForward()
 {
-    Serial.println("Jade do przodu");
+    Logger::debug("Jade do przodu");
 
     digitalWrite(ENGINE_INPUT_1, LOW);
     digitalWrite(ENGINE_INPUT_2, HIGH);
@@ -65,7 +65,7 @@ void Car::goForward()
 
 void Car::goBackward()
 {
-    Serial.println("Jade do tylu");
+    Logger::debug("Jade do tylu");
 
     digitalWrite(ENGINE_INPUT_1, HIGH);
     digitalWrite(ENGINE_INPUT_2, LOW);
@@ -77,7 +77,7 @@ void Car::goBackward()
 
 void Car::turnLeft()
 {
-    Serial.println("Jade w lewo");
+    Logger::debug("Jade w lewo");
 
     digitalWrite(ENGINE_INPUT_1, LOW);
     digitalWrite(ENGINE_INPUT_2, HIGH);
@@ -89,7 +89,7 @@ void Car::turnLeft()
 
 void Car::turnRight()
 {
-    Serial.println("Jade w prawo");
+    Logger::debug("Jade w prawo");
 
     digitalWrite(ENGINE_INPUT_1, LOW);
     digitalWrite(ENGINE_INPUT_2, LOW);
@@ -101,7 +101,7 @@ void Car::turnRight()
 
 void Car::stop()
 {
-    Serial.println("Halt!");
+    Logger::debug("Halt!");
 
     digitalWrite(ENGINE_INPUT_1, LOW);
     digitalWrite(ENGINE_INPUT_2, LOW);

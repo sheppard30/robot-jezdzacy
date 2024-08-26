@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include "Car.h"
-#include "DebugSerial.h"
+#include "Logger.h"
 #include "DistanceSensor.h"
 #include "bluetooth.h"
 
@@ -10,10 +10,8 @@ void setup()
 {
   car.begin();
 
-  Serial.begin(9600);
-  Serial.begin(9600);
-
-  Serial.println("Wlaczono");
+  Logger::init(false);
+  Logger::debug("Wlaczono");
 }
 
 void loop()
